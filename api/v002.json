@@ -1,0 +1,1618 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Portal 2 API",
+    "description" : "This is the API document for SummerTech Portal 2",
+    "contact" : {
+      "email" : "ryguyheaton@gmail.com"
+    },
+    "version" : "0.0.2"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/RYGUYHEATON/portal2/0.0.2",
+    "description" : "SwaggerHub API Auto Mocking"
+  } ],
+  "tags" : [ {
+    "name" : "camper",
+    "description" : "Operations related to camper info"
+  }, {
+    "name" : "staff",
+    "description" : "Operations related to staff info"
+  }, {
+    "name" : "attendance",
+    "description" : "Operations related to camper attedance"
+  }, {
+    "name" : "elective",
+    "description" : "Operations related to electives"
+  }, {
+    "name" : "class",
+    "description" : "Operations related to classes"
+  }, {
+    "name" : "pairings",
+    "description" : "Operations related to class pairings"
+  }, {
+    "name" : "user",
+    "description" : "Operations related to user data"
+  }, {
+    "name" : "inventory",
+    "description" : "Operations related to inventory stock data"
+  }, {
+    "name" : "event",
+    "description" : "Operations related to event data"
+  } ],
+  "paths" : {
+    "/camper" : {
+      "get" : {
+        "tags" : [ "camper" ],
+        "summary" : "Get a full list of campers",
+        "operationId" : "getCamperList",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "$/components/schemas/Camper"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "camper" ],
+        "summary" : "Update an existing camper's data",
+        "operationId" : "updateCamper",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Camper"
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "camper" ],
+        "summary" : "Add a new camper to the roster",
+        "operationId" : "addCamper",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Camper"
+        },
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/camper/{camperId}" : {
+      "get" : {
+        "tags" : [ "camper" ],
+        "summary" : "Get camper by ID",
+        "operationId" : "getCamperById",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "path",
+          "description" : "ID of camper to return",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Camper"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Camper"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "camper" ],
+        "summary" : "Remove a camper from the roster",
+        "operationId" : "removeCamper",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Camper"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          }
+        }
+      }
+    },
+    "/camper/{camperId}/toggleCheckedIn" : {
+      "post" : {
+        "tags" : [ "camper", "attendance" ],
+        "summary" : "Toggle a camper's checkedIn status given ID",
+        "operationId" : "toggleCamperCheckedIn",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "path",
+          "description" : "ID of camper to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean",
+                  "description" : "The updated value of checkedIn"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/camper/{camperId}/toggleIsActive" : {
+      "post" : {
+        "tags" : [ "camper" ],
+        "summary" : "Toggle's a camper's isActive status given an ID",
+        "operationId" : "toggleCamperIsActive",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "path",
+          "description" : "ID of camper to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean",
+                  "description" : "The updated value of isActive"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          }
+        }
+      }
+    },
+    "/camper/{camperName}/findByName" : {
+      "get" : {
+        "tags" : [ "camper" ],
+        "summary" : "Gets a list of campers with the given name (first, last, or both)",
+        "operationId" : "findCampersByName",
+        "parameters" : [ {
+          "name" : "camperName",
+          "in" : "path",
+          "description" : "Name to find",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Camper"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "No campers found with that name"
+          }
+        }
+      }
+    },
+    "/camper/{camperId}/teachers" : {
+      "get" : {
+        "tags" : [ "camper", "pairings" ],
+        "summary" : "Get a list of a camper's teachers given ID",
+        "operationId" : "findCamperTeachers",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "path",
+          "description" : "ID of camper to find",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Staff"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "camper", "pairings" ],
+        "summary" : "Detaches a camper from all pairings given ID",
+        "operationId" : "detachCamper",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "path",
+          "description" : "ID of camper to detach",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          }
+        }
+      }
+    },
+    "/camper/findAllCheckedIn" : {
+      "get" : {
+        "tags" : [ "camper", "attendance" ],
+        "summary" : "Gets a list of all active campers currently checked in",
+        "operationId" : "findAllCampersIn",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Camper"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/camper/findAllCheckedOut" : {
+      "get" : {
+        "tags" : [ "camper", "attendance" ],
+        "summary" : "Gets a list of all active campers currently checked out",
+        "operationId" : "findAllCampersOut",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Camper"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/staff" : {
+      "get" : {
+        "tags" : [ "staff" ],
+        "summary" : "Get a full list of staff members",
+        "operationId" : "getStaffList",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Staff"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "staff" ],
+        "summary" : "Update an existing staff's data",
+        "operationId" : "updateStaff",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Staff"
+        },
+        "responses" : {
+          "400" : {
+            "description" : "Invalid ID"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "staff" ],
+        "summary" : "Add a new staff to the roster",
+        "operationId" : "addStaff",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Staff"
+        },
+        "responses" : {
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/staff/{staffId}" : {
+      "get" : {
+        "tags" : [ "staff" ],
+        "summary" : "Get staff by ID",
+        "operationId" : "getStaffById",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "path",
+          "description" : "ID of staff to return",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Staff"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Staff"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "staff" ],
+        "summary" : "Remove a staff from the roster",
+        "operationId" : "removeStaff",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Staff"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          }
+        }
+      }
+    },
+    "/staff/{staffId}/toggleIsActive" : {
+      "post" : {
+        "tags" : [ "staff" ],
+        "summary" : "Toggle's a staff's isActive status given an ID",
+        "operationId" : "toggleStaffIsActive",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "path",
+          "description" : "ID of staff to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean",
+                  "description" : "The updated value of isActive"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          }
+        }
+      }
+    },
+    "/staff/{staffName}/findByName" : {
+      "get" : {
+        "tags" : [ "staff" ],
+        "summary" : "Gets a list of staff with the given name (first, last, or both)",
+        "operationId" : "findStaffByName",
+        "parameters" : [ {
+          "name" : "staffName",
+          "in" : "path",
+          "description" : "Name to find",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Staff"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "No staff found with that name"
+          }
+        }
+      }
+    },
+    "/staff/{staffId}/students" : {
+      "get" : {
+        "tags" : [ "staff", "pairings" ],
+        "summary" : "Get a list of a teacher's campers given ID",
+        "operationId" : "findTeacherStudents",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "path",
+          "description" : "ID of staff to find",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Camper"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "staff", "pairings" ],
+        "summary" : "Detaches a staff from all pairings given ID",
+        "operationId" : "detachStaff",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "path",
+          "description" : "ID of staff to detach",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          }
+        }
+      }
+    },
+    "/elective" : {
+      "get" : {
+        "tags" : [ "elective" ],
+        "summary" : "Get a full list of electives",
+        "operationId" : "getElectiveList",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Elective"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "elective" ],
+        "summary" : "Update an existing elective's data",
+        "operationId" : "updateElective",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Elective"
+        },
+        "responses" : {
+          "404" : {
+            "description" : "Elective not found"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "elective" ],
+        "summary" : "Add a new elective to the list",
+        "operationId" : "addElective",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Elective"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          }
+        }
+      }
+    },
+    "/elective/addCamper" : {
+      "post" : {
+        "tags" : [ "camper", "elective" ],
+        "summary" : "Add a camper to a given elective's camper list",
+        "operationId" : "addCamperToElective",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "query",
+          "description" : "ID of camper to add",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "electiveId",
+          "in" : "query",
+          "description" : "ID of elective to be added to",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Name of the elective that the camper was added to"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          },
+          "405" : {
+            "description" : "Elective not found"
+          }
+        }
+      }
+    },
+    "/elective/addStaff" : {
+      "post" : {
+        "tags" : [ "staff", "elective" ],
+        "summary" : "Add a staff to a given elective's camper list",
+        "operationId" : "addStaffToElective",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "query",
+          "description" : "ID of staff to add",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "electiveId",
+          "in" : "query",
+          "description" : "ID of elective to be added to",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Name of the elective that the staff was added to"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          },
+          "405" : {
+            "description" : "Elective not found"
+          }
+        }
+      }
+    },
+    "/elective/{electiveId}" : {
+      "delete" : {
+        "tags" : [ "elective" ],
+        "summary" : "Remove an elective from the roster",
+        "operationId" : "removeElective",
+        "parameters" : [ {
+          "name" : "electiveId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Elective"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Elective not found"
+          }
+        }
+      }
+    },
+    "/elective/{electiveId}/toggleIsActive" : {
+      "post" : {
+        "tags" : [ "elective" ],
+        "summary" : "Toggle's an elective's isActive status given an ID",
+        "operationId" : "toggleEleciveIsActive",
+        "parameters" : [ {
+          "name" : "electiveId",
+          "in" : "path",
+          "description" : "ID of elective to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean",
+                  "description" : "The updated value of isActive"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Elective not found"
+          }
+        }
+      }
+    },
+    "/class" : {
+      "get" : {
+        "tags" : [ "class" ],
+        "summary" : "Get a full list of classes",
+        "operationId" : "getClassList",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Class"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "class" ],
+        "summary" : "Update an existing class's data",
+        "operationId" : "updateClass",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Class"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Class not found"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "class" ],
+        "summary" : "Add a new class to the list",
+        "operationId" : "addClass",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Class"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          }
+        }
+      }
+    },
+    "/class/addCamper" : {
+      "post" : {
+        "tags" : [ "camper", "class" ],
+        "summary" : "Add a camper to a given class's camper list",
+        "operationId" : "addCamperToClass",
+        "parameters" : [ {
+          "name" : "camperId",
+          "in" : "query",
+          "description" : "ID of camper to add",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "classId",
+          "in" : "query",
+          "description" : "ID of class to be added to",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Name of the class that the camper was added to"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Camper not found"
+          },
+          "405" : {
+            "description" : "Class not found"
+          }
+        }
+      }
+    },
+    "/class/addStaff" : {
+      "post" : {
+        "tags" : [ "staff", "class" ],
+        "summary" : "Add a staff to a given class's camper list",
+        "operationId" : "addStaffToClass",
+        "parameters" : [ {
+          "name" : "staffId",
+          "in" : "query",
+          "description" : "ID of staff to add",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "classId",
+          "in" : "query",
+          "description" : "ID of class to be added to",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string",
+                  "description" : "Name of the class that the staff was added to"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Staff not found"
+          },
+          "405" : {
+            "description" : "Class not found"
+          }
+        }
+      }
+    },
+    "/class/{classId}" : {
+      "get" : {
+        "tags" : [ "class" ],
+        "summary" : "Get class by ID",
+        "operationId" : "getClass",
+        "parameters" : [ {
+          "name" : "classId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Class"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "405" : {
+            "description" : "Class not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "class" ],
+        "summary" : "Remove a class from the roster",
+        "operationId" : "removeClass",
+        "parameters" : [ {
+          "name" : "classId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Class"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Class not found"
+          }
+        }
+      }
+    },
+    "/class/{classId}/toggleIsActive" : {
+      "post" : {
+        "tags" : [ "class" ],
+        "summary" : "Toggle's a class's isActive status given an ID",
+        "operationId" : "toggleClassIsActive",
+        "parameters" : [ {
+          "name" : "classId",
+          "in" : "path",
+          "description" : "ID of class to update",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "boolean",
+                  "description" : "The updated value of isActive"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Class not found"
+          }
+        }
+      }
+    },
+    "/pairings" : {
+      "get" : {
+        "tags" : [ "pairings" ],
+        "summary" : "Get the whole adjacency matrix of all class pairings",
+        "operationId" : "getPairings",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "applcation/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Pairing"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "pairings" ],
+        "summary" : "Add a new teacher-student pairing",
+        "operationId" : "addPairing",
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Pairing"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation"
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "401" : {
+            "description" : "Teacher at maximum capacity"
+          },
+          "402" : {
+            "description" : "Student at maximum capacity"
+          }
+        }
+      }
+    },
+    "/pairings/{classId}/findPairingsByClass" : {
+      "get" : {
+        "tags" : [ "pairings", "class" ],
+        "summary" : "Get a list of pairings for a certain class given ID",
+        "operationId" : "findPairingsByClass",
+        "parameters" : [ {
+          "name" : "classId",
+          "in" : "path",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Pairing"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid input"
+          },
+          "404" : {
+            "description" : "Class not found"
+          }
+        }
+      }
+    },
+    "/inventory" : {
+      "get" : {
+        "tags" : [ "inventory" ],
+        "summary" : "Get a full list of all containers in inventory and their contents",
+        "operationId" : "getInventory",
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "applcation/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/InvContainer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Camper" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "birthday" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "sex" : {
+            "type" : "string",
+            "enum" : [ "male", "female", "other" ]
+          },
+          "pronouns" : {
+            "type" : "string",
+            "enum" : [ "he", "she", "they", "other" ]
+          },
+          "class" : {
+            "type" : "string",
+            "enum" : [ "java", "python", "animation", "3d" ]
+          },
+          "checkedIn" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "isActive" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        }
+      },
+      "Staff" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "birthday" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "sex" : {
+            "type" : "string",
+            "enum" : [ "male", "female", "other" ]
+          },
+          "pronouns" : {
+            "type" : "string",
+            "enum" : [ "he", "she", "they", "other" ]
+          },
+          "position" : {
+            "type" : "string",
+            "enum" : [ "junior", "senior", "director" ]
+          },
+          "isActive" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "isOn" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "nightOff" : {
+            "maximum" : 2,
+            "minimum" : 0,
+            "type" : "integer",
+            "description" : "M/T = 0, T/W = 1, M/W = 2",
+            "format" : "int32"
+          }
+        }
+      },
+      "Elective" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "location" : {
+            "type" : "string"
+          },
+          "needsRadio" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "isActive" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "campers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Camper"
+            }
+          },
+          "staff" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Staff"
+            }
+          }
+        }
+      },
+      "Class" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "location" : {
+            "type" : "string"
+          },
+          "isActive" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "campers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Camper"
+            }
+          },
+          "staff" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Staff"
+            }
+          }
+        }
+      },
+      "Pairing" : {
+        "type" : "object",
+        "properties" : {
+          "teachers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Staff"
+            }
+          },
+          "students" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Camper"
+            }
+          }
+        }
+      },
+      "InvItem" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "props" : {
+            "type" : "string"
+          },
+          "price" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "InvContainer" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "tag" : {
+            "type" : "string"
+          },
+          "contents" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/InvItem"
+            }
+          }
+        }
+      },
+      "Event" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "time" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "isActive" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "isRunning" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "leaders" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Staff"
+            }
+          }
+        }
+      },
+      "EventDay" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "date" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "day" : {
+            "type" : "string",
+            "enum" : [ "Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat" ]
+          },
+          "events" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Event"
+            }
+          }
+        }
+      },
+      "EventWeek" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "startDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "days" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/EventDay"
+            }
+          }
+        }
+      }
+    },
+    "requestBodies" : {
+      "Camper" : {
+        "description" : "Camper object to be added to roster",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Camper"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Staff" : {
+        "description" : "Staff object to be added to roster",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Staff"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Elective" : {
+        "description" : "Elective object to be added to list",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Elective"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Class" : {
+        "description" : "Class object to be added to list",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Class"
+            }
+          }
+        },
+        "required" : true
+      },
+      "Pairing" : {
+        "description" : "IDs of teacher and student to pair",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "teacherId" : {
+                  "type" : "integer",
+                  "format" : "int32"
+                },
+                "studentId" : {
+                  "type" : "integer",
+                  "format" : "int64"
+                }
+              }
+            }
+          }
+        },
+        "required" : true
+      }
+    }
+  }
+}
